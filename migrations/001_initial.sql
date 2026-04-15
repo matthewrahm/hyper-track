@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS wallets (
 -- Raw trade fills (partitioned by month)
 CREATE TABLE IF NOT EXISTS fills (
     address         VARCHAR(42) NOT NULL,
-    coin            VARCHAR(16) NOT NULL,
+    coin            VARCHAR(32) NOT NULL,
     side            CHAR(1) NOT NULL,
     price           NUMERIC(20,8) NOT NULL,
     size            NUMERIC(20,8) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS fills (
     fee             NUMERIC(20,8) NOT NULL,
     closed_pnl      NUMERIC(20,8) NOT NULL DEFAULT 0,
     oid             BIGINT NOT NULL,
-    direction       VARCHAR(16),
+    direction       VARCHAR(32),
     crossed         BOOLEAN NOT NULL DEFAULT FALSE,
     ingested_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (time_ms, address, oid)

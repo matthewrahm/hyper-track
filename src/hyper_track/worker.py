@@ -91,7 +91,14 @@ class PollWorker:
 
             while True:
                 async with self._rate_limiter:
-                    fills = await self.client.get_fills(address, start_time=start_time)
+                    try:
+                        fills = await self.client.get_fills(address, start_time=start_time)
+                    except Exception as e:
+                        if "429" in str(e):
+                            logger.warning(f"Rate limited during backfill {address[:10]}, waiting 5s...")
+                            await asyncio.sleep(5)
+                            continue
+                        raise
 
                 if not fills:
                     break
@@ -103,6 +110,7 @@ class PollWorker:
                     break
 
                 start_time = fills[-1].time + 1
+                await asyncio.sleep(0.2)  # Pace between pages
 
             # Get current snapshot
             async with self._rate_limiter:
@@ -126,7 +134,8 @@ class PollWorker:
 
         except Exception as e:
             logger.error(f"Backfill failed for {address[:10]}: {e}")
-            await self.db.update_wallet_status(address, "pending")
+            # Set to frozen to avoid infinite retry loops
+            await self.db.update_wallet_status(address, "frozen")
 
     # -- Poll Loop --
 
