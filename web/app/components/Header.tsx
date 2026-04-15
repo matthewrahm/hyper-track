@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MethodologyModal from "./MethodologyModal";
 
 export default function Header() {
   return (
@@ -13,6 +14,7 @@ export default function Header() {
           Discover and track top Hyperliquid perp traders
         </p>
       </div>
+      <MethodologyModal />
     </header>
   );
 }

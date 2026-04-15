@@ -9,6 +9,8 @@ import ScoreBadge from "./ScoreBadge";
 import StyleBadge from "./StyleBadge";
 import NumberCell from "./NumberCell";
 import SubmitWallet from "./SubmitWallet";
+import InfoTerm from "./InfoTerm";
+import { GLOSSARY } from "@/lib/glossary";
 
 type SortKey = keyof LeaderboardEntry;
 
@@ -109,14 +111,20 @@ export default function LeaderboardTable() {
               <tr>
                 <th className="table-header text-left w-8">#</th>
                 <th className="table-header text-left">Wallet</th>
-                <th className="table-header text-left">Style</th>
+                <th className="table-header text-left">
+                  <InfoTerm label="Style" explanation={GLOSSARY["Style"]} side="bottom" />
+                </th>
                 <SortHeader label="Score" field="composite_score" />
                 <SortHeader label="PnL (90d)" field="pnl_90d" />
                 <SortHeader label="ROI" field="roi_90d" />
                 <SortHeader label="Win %" field="win_rate_90d" />
                 <SortHeader label="Sharpe" field="sharpe_90d" />
-                <th className="table-header text-right hidden lg:table-cell">Sortino</th>
-                <th className="table-header text-right hidden lg:table-cell">Max DD</th>
+                <th className="table-header text-right hidden lg:table-cell">
+                  <InfoTerm label="Sortino" explanation={GLOSSARY["Sortino"]} side="bottom" />
+                </th>
+                <th className="table-header text-right hidden lg:table-cell">
+                  <InfoTerm label="Max DD" explanation={GLOSSARY["Max Drawdown"]} side="bottom" />
+                </th>
                 <SortHeader label="Trades" field="trades_90d" />
               </tr>
             </thead>

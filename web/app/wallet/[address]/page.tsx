@@ -14,8 +14,11 @@ import {
 import { useAutoRefresh } from "@/app/hooks/useAutoRefresh";
 import { formatCurrency, formatSignedCurrency, truncateAddress, styleLabel } from "@/lib/utils";
 import ScoreBadge from "@/app/components/ScoreBadge";
+import ScoreBreakdown from "@/app/components/ScoreBreakdown";
 import StyleBadge from "@/app/components/StyleBadge";
 import NumberCell from "@/app/components/NumberCell";
+import InfoTerm from "@/app/components/InfoTerm";
+import { GLOSSARY } from "@/lib/glossary";
 
 function MetricCard({
   label,
@@ -42,49 +45,69 @@ function WindowTable({ score, window }: { score: WalletScore; window: "30d" | "9
   return (
     <div className="grid grid-cols-2 gap-x-8 gap-y-3">
       <div>
-        <span className="text-xs text-muted">PnL</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="PnL" explanation={GLOSSARY["PnL 90d"]} />
+        </span>
         <div className={`num text-sm font-medium ${(get("pnl") ?? 0) >= 0 ? "text-profit" : "text-loss"}`}>
           {formatSignedCurrency(get("pnl") ?? 0)}
         </div>
       </div>
       <div>
-        <span className="text-xs text-muted">ROI</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="ROI" explanation={GLOSSARY["ROI"]} />
+        </span>
         <div className="num text-sm">
           <NumberCell value={(get("roi") ?? 0) * 100} format="pct" colorize />
         </div>
       </div>
       <div>
-        <span className="text-xs text-muted">Win Rate</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Win Rate" explanation={GLOSSARY["Win Rate"]} />
+        </span>
         <div className="num text-sm text-secondary">
           {((get("win_rate") ?? 0) * 100).toFixed(1)}%
         </div>
       </div>
       <div>
-        <span className="text-xs text-muted">Trades</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Trades" explanation={GLOSSARY["Trades"]} />
+        </span>
         <div className="num text-sm text-secondary">{get("trades") ?? 0}</div>
       </div>
       <div>
-        <span className="text-xs text-muted">Sharpe</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Sharpe" explanation={GLOSSARY["Sharpe"]} />
+        </span>
         <div className="num text-sm text-secondary">{(get("sharpe") ?? 0).toFixed(2)}</div>
       </div>
       <div>
-        <span className="text-xs text-muted">Sortino</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Sortino" explanation={GLOSSARY["Sortino"]} />
+        </span>
         <div className="num text-sm text-secondary">{(get("sortino") ?? 0).toFixed(2)}</div>
       </div>
       <div>
-        <span className="text-xs text-muted">Max Drawdown</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Max Drawdown" explanation={GLOSSARY["Max Drawdown"]} />
+        </span>
         <div className="num text-sm text-loss">{((get("max_drawdown") ?? 0) * 100).toFixed(1)}%</div>
       </div>
       <div>
-        <span className="text-xs text-muted">Profit Factor</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Profit Factor" explanation={GLOSSARY["Profit Factor"]} />
+        </span>
         <div className="num text-sm text-secondary">{(get("profit_factor") ?? 0).toFixed(2)}</div>
       </div>
       <div>
-        <span className="text-xs text-muted">Avg Hold</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="Avg Hold" explanation={GLOSSARY["Avg Hold"]} />
+        </span>
         <div className="num text-sm text-secondary">{(get("avg_hold_hours") ?? 0).toFixed(1)}h</div>
       </div>
       <div>
-        <span className="text-xs text-muted">R:R</span>
+        <span className="text-xs text-muted">
+          <InfoTerm label="R:R" explanation={GLOSSARY["Reward:Risk"]} />
+        </span>
         <div className="num text-sm text-secondary">{(get("reward_risk") ?? 0).toFixed(2)}</div>
       </div>
     </div>
@@ -119,7 +142,7 @@ export default function WalletDetail({
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <h1 className="num text-xl font-semibold">{truncateAddress(address)}</h1>
-        {score && <ScoreBadge score={score.composite_score} />}
+        {score && <ScoreBreakdown score={score} />}
         {score && <StyleBadge style={score.style} />}
       </div>
 
