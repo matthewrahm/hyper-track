@@ -134,6 +134,66 @@ async def submit_wallet(request: Request, body: WalletSubmission):
     return {"address": body.address, "status": status}
 
 
+@router.post("/discover/vaults")
+async def discover_vaults(request: Request):
+    """Scan HLP vault followers for active traders."""
+    import time as _time
+
+    db = _db(request)
+    client = request.app.state.client
+
+    # Get HLP vault followers
+    try:
+        data = await client._post({
+            "type": "vaultDetails",
+            "vaultAddress": "0xdfc24b077bc1425ad1dea75bcb6f8158e10df303",
+        })
+    except Exception as e:
+        raise HTTPException(502, f"Failed to query vault: {e}")
+
+    if not data:
+        return {"added": 0, "scanned": 0, "message": "No vault data returned"}
+
+    leader = data.get("leader", "")
+    followers = data.get("followers", [])
+    candidates = [{"address": leader}] + [{"address": f["user"], "equity": float(f.get("vaultEquity", "0"))} for f in followers]
+
+    added = 0
+    scanned = 0
+    start_90d = int((_time.time() - 90 * 86400) * 1000)
+
+    for c in candidates:
+        address = c["address"]
+
+        # Skip if already tracked
+        existing = await db.get_wallet(address)
+        if existing:
+            continue
+
+        # Check for trading activity
+        try:
+            fills = await client.get_fills(address, start_time=start_90d)
+            scanned += 1
+        except Exception:
+            continue
+
+        if len(fills) >= 10:
+            equity = c.get("equity", 0)
+            label = f"HLP follower"
+            if equity and equity > 0:
+                label += f" (${equity:,.0f})"
+
+            await db.upsert_wallet(address, source="vault_follower", label=label)
+            added += 1
+
+    return {
+        "added": added,
+        "scanned": scanned,
+        "total_candidates": len(candidates),
+        "message": f"Scanned {scanned} new addresses, added {added} active traders",
+    }
+
+
 @router.get("/health", response_model=HealthResponse)
 async def health(request: Request):
     db = _db(request)
