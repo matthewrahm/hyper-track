@@ -1,19 +1,21 @@
 """Seed wallet addresses for initial population.
 
-Known active Hyperliquid perp traders sourced from public
-leaderboards, whale trackers, and vault leaders.
-Users can submit additional addresses via the API.
+Active Hyperliquid perp traders verified via vault follower scanning
+and fill activity checks. All addresses have 10+ fills in the last 90 days.
 """
 
 SEED_ADDRESSES = [
+    # High-activity traders from HLP vault scanning (2000+ fills in 90d)
+    "0x18cd4597e06b7fe0a8cd33dda499121b3a145a8b",
+    "0x418aa6bf98a2b2bc93779f810330d88cde488888",
+    "0x585f4fbe2d2a889c286fa71fb81d01f30773f4b1",
+    "0x6417da1d2452a4b4a81aa151b7235ffec865082f",
+    "0x68c151a40b08c6d059d8eddfc0c57e18325c9e38",
+    "0x7dacca323e44f168494c779bb5e7483c468ef410",
+    "0x7facb3ec0415d6605e0cf5dff744f1108224ff4d",
+    "0xbd1ea540f5192d75af91a1c94f473cc24da662d5",
+    "0xefe263da9c803d449a572e8d126cbdab306cc147",
+    "0xefffa330cbae8d916ad1d33f0eeb16cfa711fa91",
+    # Known active HL trader
     "0xC70dfC0b2F94003ea67cb9d2B55252E3a37d0861",
-    "0x3eFB29eB52aeAC8e8BEE2b2C4e4af6C9461e2454",
-    "0x38D0f5bDC0D0b9E8a8a1b5B6FE44C75C6A56cBC1",
-    "0xe8576F860b7B24737F855b5cb6b52E3C7b48c814",
-    "0x48cce39DebC3eDE45F7F43c90D8c3B8cAFF0C2f0",
-    "0x20CbdCF5c1B3490E747FCb639aaC7f9C5A7e1215",
-    "0x5E43b77A20F5A39c8A0FD2B8F2D24d1e1fA75c23",
-    "0xd11F5C77e5f1d8B96fE0f5B5E6eFd3C6DA4D2d9E",
-    "0xA1B2C3D4E5F6a7b8C9D0E1F2A3B4C5D6E7F8A9B0",
-    "0x1234567890abcdef1234567890abcdef12345678",
 ]
